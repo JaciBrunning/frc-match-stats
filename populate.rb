@@ -21,6 +21,8 @@ begin
             red_teams varchar(50),
             blue_teleop int, blue_auto int, blue_penalty int, blue_score int,
             red_teleop int, red_auto int, red_penalty int, red_score int,
+            blue_high_shots int, blue_low_shots int,
+            red_high_shots int, red_low_shots int,
             UNIQUE(match)
         )
     SQL
@@ -46,11 +48,15 @@ def insert match
         match["alliances"]["blue"]["teams"].map { |x| x.sub("frc", "") }.join(" "),
         match["alliances"]["red"]["teams"].map { |x| x.sub("frc", "") }.join(" "),
         blue_score_bd["teleopPoints"], blue_score_bd["autoPoints"], blue_score_bd["foulPoints"], blue_score_bd["totalPoints"],
-        red_score_bd["teleopPoints"], red_score_bd["autoPoints"], red_score_bd["foulPoints"], red_score_bd["totalPoints"]
+        red_score_bd["teleopPoints"], red_score_bd["autoPoints"], red_score_bd["foulPoints"], red_score_bd["totalPoints"],
+        blue_score_bd["teleopBouldersHigh"] + blue_score_bd["autoBouldersHigh"],
+        blue_score_bd["teleopBouldersLow"] + blue_score_bd["autoBouldersLow"],
+        red_score_bd["teleopBouldersHigh"] + red_score_bd["autoBouldersHigh"],
+        red_score_bd["teleopBouldersLow"] + red_score_bd["autoBouldersLow"]
     ]
     
     begin
-        @db.execute("INSERT INTO matches VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", datum)
+        @db.execute("INSERT INTO matches VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", datum)
     rescue SQLite3::ConstraintException      # Unique
     end
 end
