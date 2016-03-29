@@ -15,7 +15,7 @@ ANALYSIS = {
     "highest_win_margin_no_card" => nil
 }
 
-EVENT_LIST=ARGV
+EVENT_OR_TEAM_LIST=ARGV
 
 def analyse key, row, row_key
     ANALYSIS[key] = row if (ANALYSIS[key].nil? \
@@ -25,9 +25,14 @@ def analyse key, row, row_key
                                     && row["red_#{row_key}"] > ANALYSIS[key]["red_#{row_key}"]))
 end
 
+def includesTeams row
+    arr = [row["blue_teams"], row["red_teams"]].map { |x| x.split(" ") }.flatten
+    !(arr & EVENT_OR_TEAM_LIST).empty?
+end
+
 @db.results_as_hash = true
 @db.execute("select * from matches") do |row|
-    next unless EVENT_LIST.length == 0 || EVENT_LIST.include?(row["event"])
+    next unless EVENT_OR_TEAM_LIST.length == 0 || EVENT_OR_TEAM_LIST.include?(row["event"]) || includesTeams(row)
     
     row["blue_minus_penalty"] = row["blue_score"] - row["blue_penalty"]
     row["red_minus_penalty"] = row["red_score"] - row["red_penalty"]
