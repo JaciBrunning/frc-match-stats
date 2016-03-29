@@ -162,7 +162,6 @@ puts "\t#{EVENTS[highest["event"]]}"
 puts "\t#{match_to_words(highest)}"
 puts "\t\tRed:  #{highest["red_teams"]}\t-- #{highest["red_high_shots"]}"
 puts "\t\tBlue: #{highest["blue_teams"]}\t-- #{highest["blue_high_shots"]}"
-puts "\t\tWinning Margin: #{highest["win_margin"]}"
 puts
 
 
@@ -172,7 +171,6 @@ puts "\t#{EVENTS[highest["event"]]}"
 puts "\t#{match_to_words(highest)}"
 puts "\t\tRed:  #{highest["red_teams"]}\t-- #{highest["red_low_shots"]}"
 puts "\t\tBlue: #{highest["blue_teams"]}\t-- #{highest["blue_low_shots"]}"
-puts "\t\tWinning Margin: #{highest["win_margin"]}"
 puts
 
 highest = ANALYSIS["highest_total_goals"]
@@ -181,7 +179,6 @@ puts "\t#{EVENTS[highest["event"]]}"
 puts "\t#{match_to_words(highest)}"
 puts "\t\tRed:  #{highest["red_teams"]}\t-- #{highest["red_low_shots"]} Low + #{highest["red_high_shots"]} High"
 puts "\t\tBlue: #{highest["blue_teams"]}\t-- #{highest["blue_low_shots"]} Low + #{highest["blue_high_shots"]} High"
-puts "\t\tWinning Margin: #{highest["win_margin"]}"
 puts
 
 print CACHE
