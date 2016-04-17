@@ -21,8 +21,8 @@ begin
             red_teams varchar(50),
             blue_teleop int, blue_auto int, blue_penalty int, blue_score int,
             red_teleop int, red_auto int, red_penalty int, red_score int,
-            blue_high_shots int, blue_low_shots int,
-            red_high_shots int, red_low_shots int,
+            blue_high_shots int, blue_low_shots int, blue_high_teleop int, blue_low_teleop int,
+            red_high_shots int, red_low_shots int, red_high_teleop int, red_low_teleop int,
             UNIQUE(match)
         )
     SQL
@@ -51,12 +51,14 @@ def insert match
         red_score_bd["teleopPoints"], red_score_bd["autoPoints"], red_score_bd["foulPoints"], red_score_bd["totalPoints"],
         blue_score_bd["teleopBouldersHigh"] + blue_score_bd["autoBouldersHigh"],
         blue_score_bd["teleopBouldersLow"] + blue_score_bd["autoBouldersLow"],
+        blue_score_bd["teleopBouldersHigh"], blue_score_bd["teleopBouldersLow"],
         red_score_bd["teleopBouldersHigh"] + red_score_bd["autoBouldersHigh"],
-        red_score_bd["teleopBouldersLow"] + red_score_bd["autoBouldersLow"]
+        red_score_bd["teleopBouldersLow"] + red_score_bd["autoBouldersLow"],
+        red_score_bd["teleopBouldersHigh"], red_score_bd["teleopBouldersLow"]
     ]
     
     begin
-        @db.execute("INSERT INTO matches VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", datum)
+        @db.execute("INSERT INTO matches VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", datum)
     rescue SQLite3::ConstraintException      # Unique
     end
 end
@@ -66,7 +68,10 @@ def has_occured match
 end
 
 def existsCheck id
-    @db.execute( "select 1 from matches where match = ?", [id] ).length > 0
+    begin
+        @db.execute( "select 1 from matches where match = ?", [id] ).length > 0
+    rescue SQLite3::SQLException
+    end
 end
 
 events_all = JSON.parse open("http://www.thebluealliance.com/api/v2/events/2016", "X-TBA-App-Id" => "jacinta:scorefinder:v0.1").read

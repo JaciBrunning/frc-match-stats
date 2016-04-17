@@ -14,6 +14,10 @@ ANALYSIS = {
     "highest_win_margin" => nil,
     "highest_win_margin_no_card" => nil,
     "highest_high_goals" => nil,
+    "highest_teleop_high_goals" => nil,
+    "highest_teleop_low_goals" => nil,
+    "highest_auto_high_goals" => nil,
+    "highest_auto_low_goals" => nil,
     "highest_low_goals" => nil,
     "highest_total_goals" => nil
 }
@@ -39,6 +43,12 @@ end
     
     row["blue_minus_penalty"] = row["blue_score"] - row["blue_penalty"]
     row["red_minus_penalty"] = row["red_score"] - row["red_penalty"]
+    
+    row["blue_high_auto"] = row["blue_high_shots"] - row["blue_high_teleop"]
+    row["blue_low_auto"] = row["blue_low_shots"] - row["blue_low_teleop"]
+    row["red_high_auto"] = row["red_high_shots"] - row["red_high_teleop"]
+    row["red_low_auto"] = row["red_low_shots"] - row["red_low_teleop"]
+    
     row["winning_alliance"] = "TIE"
     row["winning_alliance"] = "blue" if row["blue_score"] > row["red_score"]
     row["winning_alliance"] = "red" if row["red_score"] > row["blue_score"]
@@ -58,6 +68,10 @@ end
     analyse("highest_high_goals", row, "high_shots")
     analyse("highest_low_goals", row, "low_shots")
     analyse("highest_total_goals", row, "goals")
+    analyse("highest_teleop_high_goals", row, "high_teleop")
+    analyse("highest_teleop_low_goals", row, "low_teleop")
+    analyse("highest_auto_high_goals", row, "high_auto")
+    analyse("highest_auto_low_goals", row, "low_auto")
     
     if ANALYSIS["highest_win_margin"].nil? || ANALYSIS["highest_win_margin"]["win_margin"] < row["win_margin"]
         ANALYSIS["highest_win_margin"] = row
@@ -164,6 +178,21 @@ puts "\t\tRed:  #{highest["red_teams"]}\t-- #{highest["red_high_shots"]}"
 puts "\t\tBlue: #{highest["blue_teams"]}\t-- #{highest["blue_high_shots"]}"
 puts
 
+highest = ANALYSIS["highest_auto_high_goals"]
+puts "Highest Autonomous High Goal Count:"
+puts "\t#{EVENTS[highest["event"]]}"
+puts "\t#{match_to_words(highest)}"
+puts "\t\tRed:  #{highest["red_teams"]}\t-- #{highest["red_high_auto"]}"
+puts "\t\tBlue: #{highest["blue_teams"]}\t-- #{highest["blue_high_auto"]}"
+puts
+
+highest = ANALYSIS["highest_teleop_high_goals"]
+puts "Highest Teleop High Goal Count:"
+puts "\t#{EVENTS[highest["event"]]}"
+puts "\t#{match_to_words(highest)}"
+puts "\t\tRed:  #{highest["red_teams"]}\t-- #{highest["red_high_teleop"]}"
+puts "\t\tBlue: #{highest["blue_teams"]}\t-- #{highest["blue_high_teleop"]}"
+puts
 
 highest = ANALYSIS["highest_low_goals"]
 puts "Highest Low Goal Count:"
@@ -171,6 +200,22 @@ puts "\t#{EVENTS[highest["event"]]}"
 puts "\t#{match_to_words(highest)}"
 puts "\t\tRed:  #{highest["red_teams"]}\t-- #{highest["red_low_shots"]}"
 puts "\t\tBlue: #{highest["blue_teams"]}\t-- #{highest["blue_low_shots"]}"
+puts
+
+highest = ANALYSIS["highest_auto_low_goals"]
+puts "Highest Autonomous Low Goal Count:"
+puts "\t#{EVENTS[highest["event"]]}"
+puts "\t#{match_to_words(highest)}"
+puts "\t\tRed:  #{highest["red_teams"]}\t-- #{highest["red_low_auto"]}"
+puts "\t\tBlue: #{highest["blue_teams"]}\t-- #{highest["blue_low_auto"]}"
+puts
+
+highest = ANALYSIS["highest_teleop_low_goals"]
+puts "Highest Teleop Low Goal Count:"
+puts "\t#{EVENTS[highest["event"]]}"
+puts "\t#{match_to_words(highest)}"
+puts "\t\tRed:  #{highest["red_teams"]}\t-- #{highest["red_low_teleop"]}"
+puts "\t\tBlue: #{highest["blue_teams"]}\t-- #{highest["blue_low_teleop"]}"
 puts
 
 highest = ANALYSIS["highest_total_goals"]
